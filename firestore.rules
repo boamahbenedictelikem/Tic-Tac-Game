@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User profile documents (authenticated users update their own profile, anyone can read display names)
+    match /users/{userId} {
+      allow read: if true;
+      allow create, update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Games collection (allows guest and authenticated players to create and play AI/multiplayer games)
+    match /games/{gameId} {
+      allow read, write: if true;
+
+      // Event Sourcing events subcollection
+      match /events/{eventId} {
+        allow read, write: if true;
+      }
+    }
+  }
+}

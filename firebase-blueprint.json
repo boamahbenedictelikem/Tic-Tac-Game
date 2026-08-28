@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "UserProfile": {
+      "collection": "users",
+      "fields": {
+        "uid": { "type": "string", "description": "Google User ID" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "email": { "type": "string", "description": "User email address" },
+        "photoURL": { "type": "string", "description": "User avatar URL" },
+        "stats": {
+          "type": "object",
+          "description": "Total wins, losses, draws across AI and multiplayer games"
+        },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "Game": {
+      "collection": "games",
+      "fields": {
+        "id": { "type": "string", "description": "Unique game document ID" },
+        "code": { "type": "string", "description": "Short 6-character room code" },
+        "mode": { "type": "string", "description": "ai | multiplayer" },
+        "aiDifficulty": { "type": "string", "description": "easy | medium | hard" },
+        "status": { "type": "string", "description": "waiting | in_progress | completed | abandoned" },
+        "playerX": { "type": "object", "description": "Player playing as X (uid, name, photoURL)" },
+        "playerO": { "type": "object", "description": "Player playing as O (uid, name, photoURL or AI)" },
+        "currentTurn": { "type": "string", "description": "X | O" },
+        "winner": { "type": "string", "description": "X | O | draw | null" },
+        "winningLine": { "type": "array", "description": "Array of 3 cell indices (0-8) or null" },
+        "eventCount": { "type": "number", "description": "Total event sequence counter" },
+        "activeTurnIndex": { "type": "number", "description": "Current head turn index" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "subcollections": {
+        "events": {
+          "collection": "events",
+          "fields": {
+            "id": { "type": "string", "description": "Event ID" },
+            "sequence": { "type": "number", "description": "Sequential integer starting from 1" },
+            "type": { "type": "string", "description": "MOVE | ROLLBACK | RESIGN" },
+            "playerSymbol": { "type": "string", "description": "X | O" },
+            "cellIndex": { "type": "number", "description": "0-8 grid cell" },
+            "targetSequence": { "type": "number", "description": "For ROLLBACK events: target sequence rolled back to" },
+            "userId": { "type": "string", "description": "UID of the actor" },
+            "userName": { "type": "string", "description": "Name of actor" },
+            "timestamp": { "type": "timestamp" }
+          }
+        }
+      }
+    }
+  }
+}
